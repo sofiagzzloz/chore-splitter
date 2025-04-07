@@ -1,5 +1,3 @@
-// src/app/login/page.tsx (or /pages/login.tsx if using Pages Router)
-
 'use client'
 
 import { useState } from 'react'
