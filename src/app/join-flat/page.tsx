@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react' // icon lib
+import Navbar from '../components/Navbar'
 
 export default function JoinFlatPage() {
   const [flatId, setFlatId] = useState('')
@@ -23,12 +24,27 @@ export default function JoinFlatPage() {
       return
     }
 
-    const { error } = await supabase.from('flat_members').insert([
-      {
-        flat_id: flatId,
-        user_id: user.id,
-      },
-    ])
+    const {
+        data: flat,
+        error: codeError,
+      } = await supabase
+        .from('flats')
+        .select('id')
+        .eq('flat_code', flatId.toLowerCase()) // assuming they input the code here
+        .single()
+      
+      if (codeError || !flat) {
+        alert('Flat code not found.')
+        setLoading(false)
+        return
+      }
+      
+      const { error } = await supabase.from('flat_members').insert([
+        {
+          flat_id: flat.id, // use ID from short code lookup
+          user_id: user.id,
+        },
+      ])
 
     if (error) {
       alert(`Failed to join: ${error.message}`)
@@ -41,7 +57,8 @@ export default function JoinFlatPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 gap-4">
+    <div className="flex flex-col items-center p-6 gap-6 max-w-2xl mx-auto mt-12">
+        <Navbar />
       <h1 className="text-2xl font-bold">Join a Flat</h1>
       <input
         className="border p-2 rounded w-full max-w-xs"
@@ -53,8 +70,7 @@ export default function JoinFlatPage() {
       <button
         onClick={handleJoinFlat}
         disabled={loading || !flatId}
-        className="bg-purple-500 text-white px-4 py-2 rounded disabled:opacity-50"
-      >
+        className="w-full py-2 rounded-md font-medium transition bg-blue-200 hover:bg-blue-300 text-gray-800 shadow">
         {loading ? 'Joining...' : 'Join Flat'}
       </button>
       <Link

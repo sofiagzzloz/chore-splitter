@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react' // icon lib
+import Navbar from '../components/Navbar'
 
 export default function ProfileSetupPage() {
   const [name, setName] = useState('')
@@ -40,7 +41,8 @@ export default function ProfileSetupPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-6">
+    <div className="flex flex-col items-center p-6 gap-6 max-w-2xl mx-auto mt-12">
+        <Navbar />
       <h1 className="text-xl font-bold">Set Your Display Name</h1>
       <input
         type="text"
@@ -52,8 +54,7 @@ export default function ProfileSetupPage() {
       <button
         onClick={handleSave}
         disabled={loading || !name}
-        className="bg-indigo-500 text-white px-4 py-2 rounded disabled:opacity-50"
-      >
+        className="w-full py-2 rounded-md font-medium transition bg-blue-200 hover:bg-blue-300 text-gray-800 shadow">
         {loading ? 'Saving...' : 'Save Name'}
       </button>
       <Link
