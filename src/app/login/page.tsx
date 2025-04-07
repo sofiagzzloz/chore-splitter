@@ -16,8 +16,10 @@ export default function LoginPage() {
       : await supabase.auth.signUp({ email, password })
 
     if (error) alert(error.message)
-    else alert('Success!')
-    setLoading(false)
+        else {
+          alert('Success!')
+          window.location.href = '/'
+        }
   }
 
   return (
