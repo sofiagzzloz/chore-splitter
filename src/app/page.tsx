@@ -43,7 +43,7 @@ export default function Dashboard() {
         .eq('user_id', user.id)
 
       if (!flatsError && data) {
-        const typedData = data as FlatMemberWithFlat[]
+        const typedData = data as unknown as FlatMemberWithFlat[]
         const userFlats: Flat[] = typedData
           .map(entry => entry.flats)
           .filter((f): f is Flat => f !== null)
@@ -131,6 +131,15 @@ export default function Dashboard() {
         </span>
       </p>
     )}
+
+      <Link 
+        href="/my-flat"
+        className="w-full bg-teal-100 hover:bg-teal-200 text-teal-800 font-medium py-2 px-4 rounded-md shadow transition text-center"
+      >
+        View Flat
+      </Link>
+
+
 
     <h2 className="text-lg font-semibold mt-6 mb-2">Your Chores:</h2>
     {chores.length === 0 ? (
